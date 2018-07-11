@@ -38,14 +38,14 @@ function printNextFiveBusArrivals(busStopCode) {
             console.log(`Failed to print next five bus arrivals correctly using busStopCode ${busStopCode}. Status code was ${response.statusCode}`)
         } else if (error !== null) {
             console.log(error);
-        }else {
+        } else {
             // Extract data from body
             const rawData = JSON.parse(body);
             const sortedData = rawData.sort((a, b) => (a.timeToStation - b.timeToStation));
             // Display it
             console.log(`\nThe next five buses at bus stop ${busStopCode} will be:`);
-            for (let bus of sortedData.slice(0, 5)) {
-                console.log(`${sortedData.indexOf(bus) + 1}: ${bus.lineId} to ${bus.destinationName}, in ${getMinsAndSeconds(bus.timeToStation)}`);
+            for (let [index, element] of sortedData.slice(0, 5).entries()) {
+                console.log(`${index}: ${element.lineId} to ${element.destinationName}, in ${getMinsAndSeconds(element.timeToStation)}`);
             }
         }
     })
