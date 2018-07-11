@@ -1,5 +1,5 @@
-const request = require('request');
 const readline = require('readline-sync');
+const APIrequest = require('./APIrequest');
 
 function getPostCode() {
     console.log("Please enter a Postcode");
@@ -9,18 +9,12 @@ function getPostCode() {
 
 function getLongAndLat(myPostcode, callback) {
     const url = `http://api.postcodes.io/postcodes/${myPostcode}`;
-    request(url , function (error, response, body) {
-        if (error !== null) {
-            console.log('error:', error);
-            console.log('statusCode:', response && response.statusCode);
-        } else if (error !== null) {
-            console.log(error);
-        } else {
-            const rawPostcodeData = JSON.parse(body).result;
-            const myLocation = [rawPostcodeData.longitude, rawPostcodeData.latitude];
-            callback(myLocation)
+    APIrequest.apiRequest(url, "Failed to get longitude and latitude", function (rawData) {
+            const myLocation = [rawData.result.longitude, rawData.result.latitude];
+            callback(myLocation);
         }
-    });
+    )
+
 }
 
 exports.getPostCode = getPostCode;
