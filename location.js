@@ -7,14 +7,11 @@ function getPostCode() {
     return raw.trim().toUpperCase().replace(' ', '');
 }
 
-function getLongAndLat(myPostcode, callback) {
+function getLongAndLat(myPostcode) {
     const url = `http://api.postcodes.io/postcodes/${myPostcode}`;
-    APIrequest.apiRequest(url, "Failed to get longitude and latitude", function (rawData) {
-            const myLocation = [rawData.result.longitude, rawData.result.latitude];
-            callback(myLocation);
-        }
-    )
-
+    return APIrequest.apiRequest(url, "Failed to get longitude and latitude").then(function (rawData) {
+            return [rawData.result.longitude, rawData.result.latitude];
+    });
 }
 
 exports.getPostCode = getPostCode;

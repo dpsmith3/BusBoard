@@ -1,17 +1,17 @@
 const request = require('request');
 
-function apiRequest(url, errorMessage, callback) {
-    request(url, function (error, response, body) {
-        // Check if there is an error, report it
-        if (response.statusCode === 404) {
-            console.log(`${errorMessage}`);
-        } else if (error !== null) {
-            console.log(error);
-        } else {
-            // Extract raw data from body and callback
-            const rawData = JSON.parse(body);
-            callback(rawData);
-        }
+function apiRequest(url, errorMessage) {
+    return new Promise( function (resolve, reject) {
+        request(url, function (error, response, body) {
+            if (response.statusCode !== 200) {
+                reject(console.log(`${errorMessage}`));
+            } else if (error !== null) {
+                reject(console.log(error));
+            } else {
+                const rawData = JSON.parse(body);
+                resolve(rawData);
+            }
+        })
     })
 }
 
