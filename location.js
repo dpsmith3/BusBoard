@@ -1,11 +1,4 @@
-const readline = require('readline-sync');
 const apiRequest = require('./apiRequest');
-
-function getPostCode() {
-    console.log("Please enter a Postcode");
-    const raw = readline.prompt();
-    return raw.trim().toUpperCase().replace(' ', '');
-}
 
 function getLongAndLat(myPostcode) {
     const url = `http://api.postcodes.io/postcodes/${myPostcode}`;
@@ -14,5 +7,4 @@ function getLongAndLat(myPostcode) {
     });
 }
 
-exports.getPostCode = getPostCode;
 exports.getLongAndLat = getLongAndLat;

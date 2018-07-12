@@ -3,12 +3,6 @@ const tflUrlBase = 'https://api.tfl.gov.uk/';
 const appID = 'fc74bda1';
 const appKey = 'e49db77088e0f0288fcb620712571331';
 
-function getMinsAndSeconds(time) {
-    const minutes = Math.floor(time / 60);
-    const seconds = time - minutes * 60;
-    return `${minutes} minutes and ${seconds} seconds.`;
-}
-
 function getStopCodes(myLocation) {
     const long = myLocation[0];
     const lat = myLocation[1];
@@ -16,9 +10,9 @@ function getStopCodes(myLocation) {
     return apiRequest.apiRequest(url, "Failed to get stop codes").then(function (rawData) {
             const stopPoints = rawData["places"];
             return [
-            stopPoints[0]["lineGroup"][0]["naptanIdReference"],
-            stopPoints[0]["lineGroup"][1]["naptanIdReference"]
-            ];
+                stopPoints[0]["lineGroup"][0]["naptanIdReference"],
+                stopPoints[0]["lineGroup"][1]["naptanIdReference"]
+                ];
     })
 }
 
@@ -36,5 +30,4 @@ function getNextFiveBusArrivals(busStopCode) {
     });
 }
 
-exports.getStopCodes = getStopCodes;
-exports.getNextFiveBusArrivals = getNextFiveBusArrivals;
+module.exports = {getStopCodes, getNextFiveBusArrivals};
