@@ -2,14 +2,16 @@ const tfl = require('./tfl');
 const location = require('./location');
 
 //Main
-location.getLongAndLat(location.getPostCode())
+function getBusArrivalsFromPostcode(postcode, callback) {
+    location.getLongAndLat(postcode)
     .then(myLocation => tfl.getStopCodes(myLocation))
     .then(twoNearestStops => {
         return Promise.all(twoNearestStops.map(stop => tfl.getNextFiveBusArrivals(stop)))
     })
     .then((values) => {
-        for (let element of values) {
-            console.log(element)
-        }
+        callback(values/*.join('\n')*/);
     })
-    .catch(error => console.log(error));
+    .catch(error => error);
+}
+
+exports.getBusArrivalsFromPostcode = getBusArrivalsFromPostcode;
