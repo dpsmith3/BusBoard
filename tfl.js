@@ -6,7 +6,7 @@ const appKey = 'e49db77088e0f0288fcb620712571331';
 function getMinsAndSeconds(time) {
     const minutes = Math.floor(time / 60);
     const seconds = time - minutes * 60;
-    return `${minutes} minutes and ${seconds} seconds.`
+    return `${minutes} minutes and ${seconds} seconds.`;
 }
 
 function getStopCodes(myLocation) {
@@ -26,13 +26,14 @@ function getNextFiveBusArrivals(busStopCode) {
     const url = `${tflUrlBase}StopPoint/${busStopCode}/Arrivals?app_id=${appID}&app_key=${appKey}`;
     return apiRequest.apiRequest(url, "Failed to print next five bus arrivals").then(function (rawData) {
         const sortedData = rawData.sort((a, b) => (a.timeToStation - b.timeToStation));
-        let result = `\nThe next five buses at bus stop ${busStopCode} will be:`;
-        for (let [index, element] of sortedData.slice(0, 5).entries()) {
-            result += `\n${index + 1}: ${element.lineId} to ${element.destinationName}, in ${getMinsAndSeconds(element.timeToStation)}`;
-        }
-        return result;
-
-    })
+        return { busStopCode: busStopCode,
+            nextFiveBuses: sortedData.slice(0,5).map(elem => [{
+                lineId: elem.lineId,
+                destinationName: elem.destinationName,
+                timeToStation: elem.timeToStation
+            }])
+        };
+    });
 }
 
 exports.getStopCodes = getStopCodes;

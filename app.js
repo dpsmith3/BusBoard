@@ -1,16 +1,30 @@
 const express = require('express');
+const tfl = require('./tfl');
+const location = require('./location');
 const app = express();
-const index = require('./index');
-const postcode = "NW5 1TL";
 
+function getBusArrivalsFromPostcode(postcode) {
+    return location.getLongAndLat(postcode)
+        .then(myLocation => tfl.getStopCodes(myLocation))
+        .then(twoNearestStops => {
+            return Promise.all(twoNearestStops.map(stop => tfl.getNextFiveBusArrivals(stop)));
+        })
+        .then((busArrivalsArray) => {
+            return busArrivalsArray;
+        });
+}
 
-
-index.getBusArrivalsFromPostcode(postcode, function(busInfo) {
-    const body = busInfo;
-    const status = 200;
-    console.log("BODY: ", body);
-    app.get('/busarrivals', (req, res) => {
-        return res.status(`${status}`).send(body);
-    });
-    app.listen(3000, () => console.log('App listening on port 3000!'));
+// User must visit URL http://localhost:3000/busarrivals/?postcode=    and enter the desired postcode at the end.
+app.get('/busarrivals', (req, res) => {
+    const postcode = req.query.postcode;
+    console.log("postcode: ", postcode);
+    getBusArrivalsFromPostcode(postcode)
+        .then((busJSON) => {
+            res.status('200').send(busJSON);
+        })
+        .catch(() => {
+            res.status('500').send("Error when getting bus arrivals from postcode");
+        })
 });
+
+app.listen(3000, () => console.log('App listening on port 3000!'));
