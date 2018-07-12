@@ -1,5 +1,5 @@
 const readline = require('readline-sync');
-const APIrequest = require('./APIrequest');
+const APIrequest = require('./apiRequest');
 
 function getPostCode() {
     console.log("Please enter a Postcode");
