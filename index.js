@@ -5,7 +5,9 @@ const location = require('./location');
 location.getLongAndLat(location.getPostCode()).then(function (myLocation) {
     tfl.getStopCodes(myLocation).then(function (twoNearestStops) {
         for (stop of twoNearestStops) {
-            tfl.getNextFiveBusArrivals(stop);
+            tfl.getNextFiveBusArrivals(stop).then(function (busArrivalData) {
+                console.log(busArrivalData);
+            });
         }
     });
 });
