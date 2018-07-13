@@ -17,7 +17,8 @@ xhttp.onsubmit = function() {
 
                 //Loop to get two stops
                 for (i = 1; i <= 2; i ++) {
-                    document.getElementById(`stop${i}`).innerHTML = rawBusData[i-1].busStopCode;
+
+                    document.getElementById(`stop${i}`).innerHTML = `${rawBusData[i-1].busStopCode}: ${rawBusData[i-1].busStopName}`;
 
                     //Inner loop to get next five buses
                     for (j = 1; j <= 5; j++) {
@@ -34,9 +35,7 @@ xhttp.onsubmit = function() {
 }
 
 function getBusDisplayLine(rawBusData, stopNo, busNo) {
-    console.log("RAW: ", rawBusData, "\nstopNo: ", stopNo, "\nbusNo: ", busNo);
     const busRoute = rawBusData[stopNo - 1].nextFiveBuses[busNo - 1][0].lineId;
-    console.log("BUSROUTE: ", busRoute);
     const busDestination = rawBusData[stopNo - 1].nextFiveBuses[busNo - 1][0].destinationName;
     const time = getMinsAndSeconds(rawBusData[stopNo - 1].nextFiveBuses[busNo - 1][0].timeToStation);
     return `${busRoute} to ${busDestination} in ${time}`;

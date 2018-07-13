@@ -22,6 +22,7 @@ function getNextFiveBusArrivals(busStopCode) {
         const sortedData = rawData.sort((a, b) => (a.timeToStation - b.timeToStation));
         console.log(sortedData);
         return { busStopCode: busStopCode,
+            busStopName: sortedData[0].stationName,
             nextFiveBuses: sortedData.slice(0,5).map(elem => [{
                 lineId: elem.lineId,
                 destinationName: elem.destinationName,
