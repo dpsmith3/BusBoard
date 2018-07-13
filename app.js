@@ -2,6 +2,7 @@ const express = require('express');
 const tfl = require('./tfl');
 const location = require('./location');
 const app = express();
+app.use(express.static('frontend'));
 
 function getBusArrivalsFromPostcode(postcode) {
     return location.getLongAndLat(postcode)
@@ -10,8 +11,7 @@ function getBusArrivalsFromPostcode(postcode) {
         .then(busArrivals => busArrivals);
 }
 
-// User must visit URL http://localhost:3000/busarrivals/?postcode=    and enter the desired postcode at the end.
-app.get('/busarrivals', (req, res) => {
+app.get('/departureBoards', (req, res) => {
     const postcode = req.query.postcode;
     console.log("postcode: ", postcode);
     getBusArrivalsFromPostcode(postcode)

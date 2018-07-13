@@ -6,7 +6,7 @@ const appKey = 'e49db77088e0f0288fcb620712571331';
 function getStopCodes(myLocation) {
     const long = myLocation[0];
     const lat = myLocation[1];
-    const url = `${tflUrlBase}Place?type=NaptanOnstreetBusCoachStopPair&lat=${lat}&lon=${long}&radius=200&app_id=${appID}&app_key=${appKey}`;
+    const url = `${tflUrlBase}Place?type=NaptanOnstreetBusCoachStopPair&lat=${lat}&lon=${long}&radius=1000&app_id=${appID}&app_key=${appKey}`;
     return apiRequest.apiRequest(url, "Failed to get stop codes").then(function (rawData) {
             const stopPoints = rawData["places"];
             return [
@@ -20,6 +20,7 @@ function getNextFiveBusArrivals(busStopCode) {
     const url = `${tflUrlBase}StopPoint/${busStopCode}/Arrivals?app_id=${appID}&app_key=${appKey}`;
     return apiRequest.apiRequest(url, "Failed to print next five bus arrivals").then(function (rawData) {
         const sortedData = rawData.sort((a, b) => (a.timeToStation - b.timeToStation));
+        console.log(sortedData);
         return { busStopCode: busStopCode,
             nextFiveBuses: sortedData.slice(0,5).map(elem => [{
                 lineId: elem.lineId,
